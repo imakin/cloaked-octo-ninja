@@ -11,11 +11,6 @@ void Outputs::setAll()
 	while (t->next!=NULL)
 	{
 		digitalWrite(t->value,HIGH);
-		
-		Serial.print(t->value);
-		Serial.print(" has been set\n");
-		delay(500);
-		
 		t = t->next;
 	}
 }
@@ -25,11 +20,6 @@ void Outputs::clearAll()
 	while (t->next!=NULL)
 	{
 		digitalWrite(t->value,LOW);
-		
-		Serial.print(t->value);
-		Serial.print(" has been clear\n");
-		delay(500);
-		
 		t = t->next;
 	}
 }
