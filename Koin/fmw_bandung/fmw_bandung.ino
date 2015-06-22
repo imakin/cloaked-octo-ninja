@@ -1,6 +1,6 @@
 #include "Hx711.h"
-#include "OutputManager.h"
-#include "Stack.h"
+//~ #include "OutputManager.h"
+//~ #include "Stack.h"
 #define k1 41
 #define k2 52
 #define k3 105
@@ -12,24 +12,23 @@ static float Weight=0;
 static float selisih = 0;
 
 Hx711 scale(A0,A1);//-- param: A0-data 	A1-sck
-Outputs output;
+//~ Outputs output;
 String inputString = "";
 boolean stringComplete = false;
 
 void setup()
 {
-    Serial.begin(9600);
-    output.add(13);
-    output.add(RELAYPIN);
-    for (uint8_t i=0;i<=20;i++)
-	{
-		output.add(i);
-	}
-    delay(1000);
-    while(1)
-    {
-		
-	}
+    //~ Serial.begin(9600);
+    //~ delay(2000);
+    //~ Serial.println("1");
+    //~ delay(2000);
+    //~ Serial.println("2");
+    //~ delay(2000);
+    //~ Serial.println("3");
+    //~ delay(2000);
+    while (1);
+    //~ output.add(13);
+    //~ output.add(RELAYPIN);
 }
 
 void loop()
@@ -51,15 +50,17 @@ void loop()
         if (selisih<TOLERANSI && selisih>-TOLERANSI)
         {
           Serial.println(" Succeed");
-          //~ Relay::on();
+          //~ output.setAll();
           delay(500);
         }
-        else
-        {
-            //~ Relay::off();
-        }
+        //~ else
+        //~ {
+            //~ output.clearAll();
+        //~ }
     }
-    else
-        //~ Relay::off();
+    //~ else
+    //~ {
+        //~ output.clearAll();
+	//~ }
     delay(200);
 }
