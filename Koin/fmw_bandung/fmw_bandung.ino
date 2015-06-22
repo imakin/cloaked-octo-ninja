@@ -13,6 +13,8 @@ static float selisih = 0;
 
 Hx711 scale(A0,A1);//-- param: A0-data 	A1-sck
 Outputs output;
+String inputString = "";
+boolean stringComplete = false;
 
 void setup()
 {
@@ -26,20 +28,6 @@ void setup()
     delay(1000);
     while(1)
     {
-		Serial.print("HAI \n");
-		node *t = output.pins.myFront();
-		while (t->next!=NULL)
-		{
-			Serial.print("We have ");
-			Serial.print(t->value);
-			Serial.print("\n");
-			if (t->next != NULL)
-				t = t->next;
-		}
-		//~ Serial.print("We pop ");
-		//~ Serial.print(t->value());
-		//~ Serial.print("\n");
-		delay(2000);
 		
 	}
 }
