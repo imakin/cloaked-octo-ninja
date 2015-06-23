@@ -1,6 +1,5 @@
 #include "Hx711.h"
-//~ #include "OutputManager.h"
-//~ #include "Stack.h"
+#include "OutputManager.h"
 #define k1 41
 #define k2 52
 #define k3 105
@@ -11,29 +10,20 @@
 static float Weight=0;
 static float selisih = 0;
 
-Hx711 scale(A0,A1);//-- param: A0-data 	A1-sck
-//~ Outputs output;
-String inputString = "";
-boolean stringComplete = false;
+Hx711 *scale;//(A0,A1);//-- param: A0-data 	A1-sck
+Outputs output;
 
 void setup()
 {
-    //~ Serial.begin(9600);
-    //~ delay(2000);
-    //~ Serial.println("1");
-    //~ delay(2000);
-    //~ Serial.println("2");
-    //~ delay(2000);
-    //~ Serial.println("3");
-    //~ delay(2000);
-    while (1);
-    //~ output.add(13);
-    //~ output.add(RELAYPIN);
+	Serial.begin(9600);
+	delay(1000);
+	while(!Serial);
+	scale = new Hx711(A0,A1);
 }
 
 void loop()
 {
-    Weight = scale.getGram();
+    Weight = scale->getGram();
     selisih = Weight - expectedW;
     Serial.print(Weight,1);
     Serial.print(" ");
@@ -45,22 +35,22 @@ void loop()
     if (selisih<TOLERANSI && selisih>-TOLERANSI)
     {
         delay(1000);
-        Weight = scale.getGram();
+        Weight = scale->getGram();
         selisih = Weight - expectedW;
         if (selisih<TOLERANSI && selisih>-TOLERANSI)
         {
           Serial.println(" Succeed");
-          //~ output.setAll();
+          output->setAll();
           delay(500);
         }
-        //~ else
-        //~ {
-            //~ output.clearAll();
-        //~ }
+        else
+        {
+            output.clearAll();
+        }
     }
-    //~ else
-    //~ {
-        //~ output.clearAll();
-	//~ }
+    else
+    {
+        output.clearAll();
+	}
     delay(200);
 }
