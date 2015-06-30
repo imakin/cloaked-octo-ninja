@@ -1,6 +1,9 @@
 #include "Stack.h"
 #include "OutputManager.h"
 #define LED 13
+#define Kunci() output.setAll()
+#define Buka() output.clearAll()
+
 void LedOn() { digitalWrite(LED,HIGH); }
 void LedOff() { digitalWrite(LED,LOW); }
 
@@ -11,7 +14,7 @@ struct DPin{
 class Magnet{
 	public:
 		DPin Dev;
-		Magnet(const uint8_t a,const uint8_t b) { 
+		Magnet(const uint8_t a,const uint8_t b) {
 			Dev.input = a;
 			Dev.grounder = b;
 			pinMode(Dev.input,INPUT);
@@ -19,10 +22,10 @@ class Magnet{
 			digitalWrite(Dev.input,HIGH);
 			digitalWrite(Dev.grounder,LOW);
 		};
-		bool IsShorted();
+		boolean IsShorted();
 		~Magnet() {};
 };
-bool Magnet::IsShorted() {
+boolean Magnet::IsShorted() {
 	if (digitalRead(Dev.input)==LOW)
 		return true;
 	return false;
@@ -30,8 +33,12 @@ bool Magnet::IsShorted() {
 
 Magnet *m1 = new Magnet(A2,A3);
 Magnet *m2 = new Magnet(A4,A5);
+unsigned long milis0;
+unsigned long milis1;
 Outputs output;
 void setup() {
+	milis0 = 0; //-- static one
+	milis1 = 0; //-- updated one
 	Serial.begin(9600);
 	delay(1000);
 	pinMode(LED,OUTPUT);
@@ -40,17 +47,35 @@ void setup() {
 	output.add(11);
 	output.add(10);
 	Serial.println("here");
+	Kunci();
 }
 void loop() {
 	Serial.println("step");
-	if (m1->IsShorted())
+	boolean a,b;
+	a = m1->IsShorted();
+	b = m2->IsShorted();
+	if (a)
 		Serial.println("m1 shorted");
-	if (m2->IsShorted())
+	if (b)
 		Serial.println("m2 shorted");
-
-	if (m1->IsShorted() && m2->IsShorted())
-		output.setAll();
+	//Serial.println("BISMILLAH");
+	if (a && b)
+	{
+		Serial.println("Harusnya masuk");
+		Buka();
+		uint8_t detik = 0;
+		Serial.println("Harusnya masuk");
+		while (m1->IsShorted() && m2->IsShorted())
+		{
+			delay(1000);
+			Serial.println(detik);
+			if (detik<16)
+				detik += 1;
+			if (detik>=15)
+				Kunci();
+  		}
+	}
 	else
-		output.clearAll();
+		Kunci();
 	delay(500);
 }
