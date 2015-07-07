@@ -1,11 +1,14 @@
 #include "Hx711.h"
 #include "OutputManager.h"
-#define k1 41
-#define k2 52
-#define k3 105
+#define k1 46.5
+#define k2 56
+#define k3 112
 
-#define expectedW (k3*2 + k2 + k1*2)
-#define TOLERANSI 15
+#define expectedW (k3*2 + k2 + k1*2 - k1)//-- 26
+#define TOLERANSI (5)
+#define expectedMin (expectedW-5)
+#define expectedMax (expectedW+6)
+
 #define RELAYPIN A2
 static float Weight=0;
 static float selisih = 0;
@@ -48,14 +51,19 @@ void loop()
     Serial.print(selisih,1);
     Serial.print(" ");
     Serial.print(expectedW,1);
+    Serial.print(" =[[== ");
+    Serial.print(expectedMin,1);
+    Serial.print("~");
+    Serial.print(expectedMax,1);
     
     Serial.println(" g");
-    if (selisih<TOLERANSI && selisih>-TOLERANSI)
+    //if (selisih<TOLERANSI && selisih>-TOLERANSI)
+    if (Weight>expectedMin && Weight<expectedMax)
     {
         delay(1000);
         Weight = scale->getGram();
-        selisih = Weight - expectedW;
-        if (selisih<TOLERANSI && selisih>-TOLERANSI)
+        //~ selisih = Weight - expectedW;
+		if (Weight>expectedMin && Weight<expectedMax)
         {
           Serial.println(" Succeed");
           RelayON(&output);
