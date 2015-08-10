@@ -34,7 +34,8 @@ void RelayOFF(Outputs *o)
 void setup()
 {
 	Serial.begin(9600);
-	delay(1000);
+	delay(3000);
+	Serial.println("hai");
 	//~ while(!Serial);
 	scale = new Hx711(A0,A1);
 	output.add(A2);
