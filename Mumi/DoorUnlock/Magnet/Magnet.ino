@@ -1,5 +1,5 @@
-#define INPUTKUNCI 0
-#define INPUTMEDALI 1
+#define INPUTKUNCI 2
+#define INPUTMEDALI 3
 static const uint8_t LED[4]={5,6,10,9};
 static const uint8_t LNUM = 4;
 int LEDisON;
@@ -16,7 +16,9 @@ void LedOn()
         {
             analogWrite(LED[i],b);
         }
-        delay(10);
+        //~ int x = 100-(int)((float)((float)b/255)*100);
+        delay( 10 );
+        //~ Serial.println(x);
     }
     digitalWrite(LED[0],HIGH);
     digitalWrite(LED[1],HIGH);
@@ -51,6 +53,10 @@ void setup()
     digitalWrite(INPUTMEDALI,HIGH);
     
     Serial.begin(9600);
+    //~ while (!Serial) 
+    {digitalWrite(13,HIGH);}
+    delay(2000);
+    digitalWrite(13,LOW);
 }
 void loop()
 {

@@ -26,4 +26,5 @@ void Outputs::clearAll()
 void Outputs::add(int pin) 
 {
 	pins.pushback(pin);
+	pinMode(pin,OUTPUT);
 }
