@@ -1,6 +1,6 @@
 #define PIN_INPUT 4
 
-#define SENSOR_PULL_DOWN
+//~ #define SENSOR_PULL_DOWN
 
 #ifdef SENSOR_PULL_DOWN
 	#define PIN_DEFAULT LOW
@@ -56,7 +56,9 @@ void loop ()
 
 	if (seq_pos==0 && seq_sub==0)
 		smallgap = thisgap;
-
+	Serial.print(thisgap);
+	Serial.print(" ");
+	Serial.println(smallgap);
 	if (selisih(thisgap, smallgap)<TOLERANCE)
 	{
 		//-- small gap, expecting seq_sub complete
