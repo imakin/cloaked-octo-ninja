@@ -49,9 +49,9 @@ void setup() {
 
 void loop () 
 {
-	while (digitalRead(PIN_INPUT, PIN_DEFAULT));
+	while (digitalRead(PIN_INPUT)==PIN_DEFAULT);
 	lasthit = millis();
-	while (digitalRead(PIN_INPUT, PIN_ON));
+	while (digitalRead(PIN_INPUT)==PIN_ON);
 	thisgap = millis() - lasthit;
 
 	if (seq_pos==0 && seq_sub==0)
