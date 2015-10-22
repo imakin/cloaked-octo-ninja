@@ -87,4 +87,8 @@ void loop ()
 			reset_seq();
 		}
 	}
+	Serial.print(seq_pos);
+	Serial.print(" ");
+	Serial.print(seq_sub);
+	Serial.print("\n");
 }
