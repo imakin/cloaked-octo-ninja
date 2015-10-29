@@ -24,7 +24,7 @@ unsigned long lasthit;
 unsigned long smallgap;
 unsigned long thisgap;
 int seq_pos, seq_sub;
-
+unsigned long tolerance;
 unsigned long selisih(unsigned long a, unsigned long b)
 {
 	//--selisih untuk unsigned
@@ -36,7 +36,7 @@ unsigned long selisih(unsigned long a, unsigned long b)
 
 void reset_seq()
 {
-	seq_sub = 0; seq_pos = 0; 
+	seq_sub = 1; seq_pos = 0; 
 }
 
 void setup() {
@@ -44,22 +44,32 @@ void setup() {
 	pinMode(PIN_INPUT, INPUT);
 	digitalWrite(PIN_INPUT, PIN_DEFAULT);
 	seq_pos = 0;
-	seq_sub = 0;
+	seq_sub = 1;
+	smallgap = 400;
+	tolerance = TOLERANCE;
 }
 
 void loop () 
 {
-	while (digitalRead(PIN_INPUT)==PIN_DEFAULT);
 	lasthit = millis();
-	while (digitalRead(PIN_INPUT)==PIN_ON);
+	while (digitalRead(PIN_INPUT)==PIN_DEFAULT)
+		while (digitalRead(PIN_INPUT)==PIN_DEFAULT)
+			delay(50);
 	thisgap = millis() - lasthit;
+	while (digitalRead(PIN_INPUT)==PIN_ON)
+		while (digitalRead(PIN_INPUT)==PIN_ON)
+			delay(50);
 
-	if (seq_pos==0 && seq_sub==0)
+	if (seq_pos==0 && seq_sub<=1)
+	{
 		smallgap = thisgap;
+		tolerance = smallgap/2;
+	}
 	Serial.print(thisgap);
 	Serial.print(" ");
-	Serial.println(smallgap);
-	if (selisih(thisgap, smallgap)<TOLERANCE)
+	Serial.print(smallgap);
+	Serial.print(" ");
+	if (selisih(thisgap, smallgap)<tolerance)
 	{
 		//-- small gap, expecting seq_sub complete
 		if (seq_sub<seq[seq_pos])
@@ -72,16 +82,18 @@ void loop ()
 			reset_seq();
 		}
 	}
-	else
+	else if (thisgap > smallgap)
 	{
 		//-- big gap, expecting seq_pos advance
-		if (seq_sub==seq[seq_pos])
+		if (seq_sub>=seq[seq_pos])
 		{
-			seq_sub = 0;
+			seq_sub = 1;
 			seq_pos = seq_pos+1;
 			if (seq_pos>=(SEQ_LENGTH-1))
 			{
 				//-- finish
+				Serial.println("sequence bener!");
+				reset_seq();
 			}
 		}
 		else
@@ -89,6 +101,7 @@ void loop ()
 			reset_seq();
 		}
 	}
+	else {reset_seq();}
 	Serial.print(seq_pos);
 	Serial.print(" ");
 	Serial.print(seq_sub);
